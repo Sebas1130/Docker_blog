@@ -1,0 +1,249 @@
+CLASE 2
+QUE ES DOCKER
+docker te permite contruir, distribuir y ejecutar cualquier aplicacion en 
+cualquier maquina
+
+PROBLEMAS DE DESARROLLO DE SOFWARE PROFESIONAL:
+ 
+ Hay tres grandes problemas principales que son los siguientos
+ *Construir
+ *Diseñar 
+ *Ejecutar
+ 
+ CONSTRUIR :
+ Escribir codigo en la maquina del desarrollador.(Compile, que no compile,
+ arreglar el bug, comparir codigo) 
+
+ La Problematica es :
+ *Entorno de desarrollo (paquetes)
+ *Dependencias de desarrollo (paquetes)
+ *Versiones en tiempo de ejecución
+ *Equivalencia de entornos de desarrollo (código compartido)
+ *Equivalencia con entornos productivos (pasar a producción)
+ *Servicios externos (integración con otros servicios ejem: base de datos)
+ 
+ DITRIBUIR : 
+ llevar la aplicacion donde se va a desplegar(Transformarse en un artefacto 
+ 
+ La Problematica es :
+ *Output de build heterogeo (múltiples compilaciones)
+ *Acceso a servidores productivos (No tenemos acceso al servidor)
+ *Ejecución nativa vs virtualizada
+ *Entornos Serverless
+ 
+ EJECUTAR :
+ implementar la solucion en el ambiente de producion(subir a producin el reto hacer 
+ que funcione como deberia funcionar )
+ 
+La Problematica es :
+*Dependencia de aplicación (paquetes, runtime)
+*Compatibilidad con el entorno productivo(sistema operativo poco amigable con la solución)
+*Disponibilidad de servicios externos (Acceso a los servicios externos)
+*Recursos de hardware (Capacidad de ejecución - Menos memoria, procesador más debil)
+
+CLASE 3
+VIRTUALIZACION :
+Nos permite atacar o manejar los tres grandes problemas de los que estabmos hablando (PROBLEMAS DE DESARROLLO DE SOFWARE PROFESIONAL) la virtualizacion se puede hacer de dos maneras y vamos a hablar de ellas :
+
+Problemas de la virtualizacion
+*PESO: En el orden de los GBs. Repiten archivos en común. Inicio lento.
+*COSTO DE ADMINISTRACION: Necesita mantenimiento igual que cualquier otra computadora.
+*MULTIPLES DE FORMATO: VDI, VMDK, VHD, raw, etc
+
+Containerización
+El empleo de contenedores para construir y desplegar software.
+
+*Flexibles
+*Livianos
+*Portables
+*Bajo acoplamiento
+*Escalables
+*Seguros
+
+Virtualizacion vs Containerización
+
+*Virtualización: 
+A diferencia de un contenedor, las máquinas virtuales ejecutan un sistema operativo completo, incluido su propio kernel.
+
+Containerización: 
+Un contenedor es un sitio aislado y ligero para ejecutar una aplicación en el sistema operativo . Los contenedores se basan en el kernel del sistema operativo host (que puede considerarse la fontanería del sistema operativo), y solo puede contener aplicaciones y algunas API ligeras del sistema operativo y servicios que se ejecutan en modo de usuario.
+
+
+CLASE 4
+instalacion de doker en linux ya viene nativamente solo es correr el comando 
+
+$ sudo apt install docker 
+
+ya dentras docker instalado 
+
+CLASE 5
+inicializando docker hub creamos la cuenta con tu nombre  correo y contraseña
+despues con la misma cuenta de docker hud iniciamos play-with-docker
+
+play-with-docker
+
+Es una instacia de docker pero en la wed donde puedes ejecutar todos los comandos de docker
+mas rapido , se ejecuta una bash de linux con docker, con git y otro componentes ya instalados
+para asi hacerte mas facil el uso de docker y no instalar en tu maquina es una buena 
+herramienta para quienes no saben como instalar o apenas quieren ver como son los comandos o 
+aprender su utilidad es variada
+
+CLASE 6
+COMO FUNCIONA DOCKER
+Es una plataforma que permite contruir, ejecutar y comparit aplicaciones mediante 
+contenedores
+
+https://ualmtorres.github.io/SeminarioDockerPresentacion/images/DockerEngine.png
+
+*Componentes dentro del Circulo de Docker 
+
+Server Docker Deamon:
+Es el centro de Docker, el corazon que gracias a el podemos manejar todas las entidates 
+de docker gracias a el podemos crearlos, ejecutarlos, borrarlos, es el que va a interaturar con el sistemas operativo para que todo eso pase es el nucleo de docker 
+
+REST API:
+Es como culquie otra API que creamos con su sistema de creacion, eliminacion, etc. y que se puede interatuar con ella con los metodos http. 
+Esto significa que nos podemos conectar desde nuestra propia maquina atraves de http o podemos exponer nuestro docker deamon para que sea visible y puedas conectarte remotamente 
+
+Client Docker CLI
+Este es la intefas que utlizamos para comunicarnos con el Docker Deamon es la misma que vamos a estar utilizando , para que se hagan una idea es donde ejecutamos los comandos de docker como docker --version o docker info. 
+
+Cuando pasamos los comando por la Terminal lo que hacemos es ejecutar el CLI de docker
+'cliente grafico de docker' para el se comunique con el Docker Deamon y este ya se encarga de ejecutarlos  
+
+Dentro de la Arquitectura de Docker Encontramos
+
+*container:
+Es la razón de ser de Docker, es donde podemos encapsular nuestras imagenes para llevarlas a otra computadora, o servidor, etc.
+
+*image:
+Son las encapsulaciones de x contenedor. Podemos correr nuestra aplicación en Java por medio de una imagen, podemos utilizar Ubuntu para correr nuestro proyecto, etc.
+
+*network
+Son las que permiten la comunicación entre contenedores.
+
+*Data volumes
+Podemos acceder con seguridad al sistema de archivos de nuestra máquina.
+
+NUEVO MODULO CONTENEDORES 
+
+CLASE 7 
+
+para ejecutar una imagen de docker es super facil vamos a ejecutar una imagen que viene por defecto cuando instalamos docker 
+
+EL comando es:
+
+sudo docker run hello-world
+
+Asi de facil hemos ejecutado una imagen de docker en nuestro maquina 
+
+CLASE 8 
+CONCEPTOS FUNDAMENTALES DE DOCKER :CONTENEDORES
+
+¿ Que es un Contenedor ?
+
+Un contenedor es :
+
+*Una agrupacion de procesos
+
+*Es una entidad logica, no tiene el limite estricto de las maquinas virtuales,ni el  de emulacion del sistema simulado por debajo 
+
+*Ejecuta sus procesos de forma nativa
+
+*Los procesos que se ejecutan adentro de los contenedores ven su universo como el contenedor lo define, no pueden ver mas allá del contenedor, a pesar de estar corriendo en una maquina más grande.
+
+*No tienen forma de consumir más recursos que los que se les permite. Si esta restringido en memoria ram por ejemplo, es la única que pueden usar.
+
+*A fines prácticos los podemos imaginar cómo maquinas virtuales, pero NO lo son. Podira decirse Máquinas virtuales livianas.
+
+*Docker corre de forma nativa solo en Linux.
+
+*Sector del disco: Cuando un contenedor es ejecutado, el daemon de docker le dice, a partir de acá para arriba este disco es tuyo, pero no puedes subir mas arriba.
+
+*Docker hace que los procesos adentro de un contenedor este aislados del resto del sistema, no le permite ver más allá.
+
+*Cada contenedor tiene un ID único, también tiene un nombre.
+
+
+CLASE 9
+comandos de DOCKER
+* docker run hello-world (corro el contenedor hello-world)
+* docker ps (muestra los contenedores activos)
+* docker ps -a (muestra todos los contenedores)
+* docker inspect <containe ID> (muestra el detalle completo de un contenedor)
+* docker inspect <name> (igual que el anterior pero invocado con el nombre)
+* docker run –-name hello-platzi hello-world (le asigno un nombre custom “hello-platzi”)
+* docker rename hello-platzi hola-platzy (cambio el nombre de hello-platzi a hola-  platzi)
+* docker rm <ID o nombre> (borro un contenedor)
+* docker container prune (borro todos lo contenedores que esten parados)
+
+CLASE 10 
+MODO INTERATIVO 
+
+El modo interativo es un comando que nos permite interaturar con distribuciones diferentes de sistemas operativos, es decir estamos corriendo un sistemas ubunto dentro de otro sistema puede ser windows, mac o hasta el mismo ubuntu  y dentro de el usando docker podemos poner a correr otro ubuntu con todo lo que trae un sistema ubunto por debajo 
+
+
+Comandos para interatutar con el modo interativo
+* docker run ubuntu (corre un ubuntu pero lo deja apagado)
+* docker ps -a (lista todos los contenedores)
+* docker -it ubuntu (lo corre y entro al shell de ubuntu)
+
+Con este comando vemos o verificamos que version estamos utilizando de ubuntu dentro del shell de windos o mac 
+
+*cat /etc/lsb-release (veo la versión de Linux)
+
+En general es el comando de de toda la vida de linux para mostrar el contenido de los archivos 'cat' y nos movemos entre las carpetas hasta llegar a la referencia del sistema 
+
+para salir ya del sistema como tal y volver a windos o mac normal se usa el comando 'exit'
+
+*exit
+
+CLASE 11 CILCO DE VIDA DE UN CONTENEDOR
+
+vamos a explicar el proceso por el cual cuando damos exit se apaga el contenedor de ubuntu esto pasa por que se detiene el main processes o proceso principal el contenedor de ubuntu se ejecuta en el bin/bash esto hace que cuando nosotros damos exit salga de la carpeta principal donde se esta ejecutando todo el proceso y hay se detiene pero existen formas de mantener ese contenedor prendido. 
+
+Hay dos porcesos principales que tienes que tener en cuenta estos se ejecutan una vez ejecutado el contenedor de ubuntu : 
+Main process
+Determina la vida del contenedor, un contendor corre siempre y cuando su proceso principal este corriendo.
+
+Sub process
+Un contenedor puede tener o lanzar procesos alternos al main process, si estos fallan el contenedor va a seguir encedido a menos que falle el main.
+
+Lo que tienes que saber es cuando decimos que estamos corriendo un contenedor estamos ejecutando un proceso y mientras ese proceso siga vivo el contenedor se ejecutara a menos que lo matemos nosotros mismos y nos toque levantarlo nuevamente con los comandos que ya vimos. 
+
+Comandos
+* docker run --name alwaysup -d ubuntu tail -f /dev/null : 
+lo que hc es ejecutar un contenedor con ubuntu pero en vez de ejecutarse el proceso con bin/bash lo ejecutamos con tail -f /dev/null esto nos permite tener el contenedor prendido para poder interatuar con el de muchas maneras la forma de detenerlo es matando el proceso 
+
+
+*docker exec -it alwaysup bash :
+Con este comando puedes ya interatuar con el ubuntu de tu contenedor , genera una terminal o un bash linux el cual en el puedes ejecutar todos los comandos de un sistema linux 
+
+
+*docker inspect --format '{{.State.Pid}}' <name_container> :
+Se puede matar un Main process desde afuera del contenedor, esto se logra conociendo el id del proceso principal del contenedor que se tiene en la maquina. 
+
+*Kill  <id_process>
+_El output del comando es el process ID (2474) _
+Para matar el proceso principal del contenedor desde afuera se ejecuta el siguiente comando (solo funciona en linux)
+
+
+CLASE 12 EXPONIENDO CONTENEDORES
+Los contenedores estan aislados del sistema y a nivel de red, cada contenedor tiene su propio stack de net sus propios puertos.
+Debemos redirigir esos puertos a los puertos que estan disponibles en nuestra computadora y lo podemos hacer con la bandera -p lo que hace referencia a 'publish'
+
+la bandera -d lo que hc ees q no vincula mi salida estandar al contenedor y lo ejecuta en bagroun
+el comando que coneta el puerto de nuestra computadora con el puerto de un contenedor es :
+
+Comandos :
+*docker run -d --name [name] -p [LocalHostPort/8080]:[ContainerPort/80] [imagen/nginx]
+
+*docker run -d --name proxy -p 8080:80 nginx :(corro un nginx y expongo el puerto 80 del contenedor en el puerto 8080 de mi máquina)localhost:8080 (desde mi navegador compruebo que funcione)
+
+Otros Comandos
+* docker stop  <nombre_contenedor>
+* docker run -d --name proxy nginx : (crea una imagen de nginx en el contenedor proxy)
+* docker rm proxy : (borro el contenedor)
+* docker rm -f <contenedor> :(para el contendor y lo borra)
+* docker logs proxy : (veo los logs del contenedor)
+* docker logs --tail 10 -f proxy (veo y sigo solo las 10 últimas entradas del log)
