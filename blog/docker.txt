@@ -128,8 +128,7 @@ Podemos acceder con seguridad al sistema de archivos de nuestra máquina.
 NUEVO MODULO CONTENEDORES 
 
 CLASE 7 
-
-para ejecutar una imagen de docker es super facil vamos a ejecutar una imagen que viene por defecto cuando instalamos docker 
+Para ejecutar una imagen de docker es super facil vamos a ejecutar una imagen que viene por defecto cuando instalamos docker 
 
 EL comando es:
 
@@ -199,7 +198,8 @@ para salir ya del sistema como tal y volver a windos o mac normal se usa el coma
 
 *exit
 
-CLASE 11 CILCO DE VIDA DE UN CONTENEDOR
+CLASE 11 
+CILCO DE VIDA DE UN CONTENEDOR
 
 vamos a explicar el proceso por el cual cuando damos exit se apaga el contenedor de ubuntu esto pasa por que se detiene el main processes o proceso principal el contenedor de ubuntu se ejecuta en el bin/bash esto hace que cuando nosotros damos exit salga de la carpeta principal donde se esta ejecutando todo el proceso y hay se detiene pero existen formas de mantener ese contenedor prendido. 
 
@@ -229,7 +229,8 @@ _El output del comando es el process ID (2474) _
 Para matar el proceso principal del contenedor desde afuera se ejecuta el siguiente comando (solo funciona en linux)
 
 
-CLASE 12 EXPONIENDO CONTENEDORES
+CLASE 12 
+EXPONIENDO CONTENEDORES
 
 Los contenedores estan aislados del sistema y a nivel de red, cada contenedor tiene su propio stack de net sus propios puertos.
 Debemos redirigir esos puertos a los puertos que estan disponibles en nuestra computadora y lo podemos hacer con la bandera -p lo que hace referencia a 'publish'
@@ -252,7 +253,8 @@ Otros Comandos
 
 NUEVO MODULO DATOS DE DOCKER
 
-CLASE 13 BIND MOUNTS -v
+CLASE 13 
+BIND MOUNTS -v
 lo primero que tenemos que tener en cuenta es q debemos tener claro la ruta en donde se van a guardar archivos por ejemplo yo ya sabia que mongo guarda sus datos en una carpetada que se llama data y hay almacena los datos en un archivo llamado db en base a eso yo ya puedo saber en donde se van a guardar y asi uilizarlo 
 
 los bind mounts son maneras de compartir tu informacion en diferentes contenedores sin que cuando elimines el contenedor no se pierda la informacion basicamente lo que hace es atar una ruta al contenedor todo lo que coloquemos o guardemos se quedara en la maquina anfitriona y sera cargado con la ruta del archivo al siguiente contenedor asi puede persistir los datos.
@@ -277,7 +279,8 @@ comandos
 	*db.users.insert({“nombre”:“guido”}) (inserto un nuevo dato)
 	*db.users.find() (veo el dato que agrege)
 
-CLASE 14 OTRA MANERA DE ALMECENAR DATOS 'VOLUMENES --mount'
+CLASE 14 
+OTRA MANERA DE ALMECENAR DATOS 'VOLUMENES --mount'
 Docker nos ofrece otras maneras de manjear datos distintas a los band mounts vamos a hablar de volumes que es la manera mas estandar de manejar datos en docker que no es la primera que salio pero los volumenes llegaron para solucionar un problema de los band mounts es la nueva actualizacion de docker para manejar datos y mas seguro para las personas que ejecutan docker en entornos productivos, tiene mas seguridad que los band mounts , lo que sucede es que la parte del disco que le estamos dando lo coje el deamon de docker y lo administra y ya no esta disponible solo docker lo puede ver y lo esta administrando lo reguarda y le coloca mas seguridad encima, para poder acceder a el tenemos que ir directamente al docker volums para mirar el conenido del archivo esta es una de las desventajas de docker
 
 ventajas de los Volumenes 
@@ -318,5 +321,106 @@ Me conecto a la BBDD
 	* db.users.insert({“nombre”:“guido”}): inserto un nuevo dato
 	* db.users.find(): veo el dato que cargué
 	
+	
+CLASE 15 
+INSERTAR Y EXTRAER ARCHIVOS DE UN CONTENEDOR 
+
+para insertar archivos y extraerlor no necesariamente se tienen que tener bind mount o volumenes las operaciones se pueden implementar para mover una carpeta o un archivo ,un bind mount o volumenes es indispensable saber que las operaciones funcionaran asi alla o no volumenes o bind mount 
+ 
+Comandos
+* touch prueba.txt :
+creo un archivo en mi máquina
+
+* docker run -d --name copytest ubuntu tail -f /dev/null : 
+corron un ubuntu y le agrego el 'tail -f /dev/null' para que quede activo
+
+* docker exec -it copytest bash :
+Entro al  bash del contenedor con nombre copytest
+
+* mkdir testing :
+creo un directorio en el contenedor
+
+* docker cp prueba.txt copytest:/testing/test.txt :
+copio el archivo 'prueba.txt' dentro del contenedor 'copytest' despues especifico la ruta en donde quiero copiarla
+
+* docker cp copytest:/testing localtesting :
+copio el directorio 'testing' del contenedor 'copytest' a mi máquina con nombre 'localtesting')
+
+En otras palabras el esquema es asi :
+*Host : Es donde esta instalado Docker o la maquina anfitriona
+
+*Bind Mount: Guarda los archivos en la maquina local persistiendo y visualizando estos datos (No seguro)
+
+*Volumenes : Guarda los archivos en el area de Docker donde Docker los administra(Segura)
+
+*TMPFS Mount : Guarda los archivos temporalmente y persiste los datos en la memoria del contenedor, cuando mates sus datos mueren con el contenedor  
 
 
+NUEVO MODULO IMAGENES  'IMAGE'
+
+CLASE 16 
+CONCEPTO FUNDAMENTALES DE DOCKER: IMAGENES 'IMAGE'
+Las imagenes llegan para solucionar los problemas de construcion y distribucion de sofware. 
+
+Las imagenes son plantillas o moldes apartir de las cuales docker crea contenedores una imagen es una pieza de sofware enpaquetada de forma liviana que contiene todo lo nesesario para que un contenedor se pueda ejecutar exitosamente ya sean dependecias de sofware , librerias ,codigo , herramientas ect es decir todo lo que el contenedor nesesita para ejecutarse esta dentro de una imagen , las imagenes son las plantillas las cuales vamos a usar para crear los contenedores mismo. 
+
+Todo lo que el contenedor nesesita esta dentro de una imagen 
+Comandos:
+*docker image ls :
+veo las imágenes que tengo localmente
+
+*docker pull ubuntu:20.04 :
+Bajo la imagen de ubuntu de dockerHud con una versión específica, puedes  ver todas las imagenes que estan disponibles en docker hub
+
+CLASE 17 
+CONSTRUYENDO UNA IMAGEN PROPIA 
+
+Profundizando en el concepto de imágen :
+Es bueno profundizar un poco más en el concepto de una imágen en Docker para entender su función, para posteriormente poder realizar una por nuestra cuenta desde 0, cuando no haya una imágenque cumpla con nuestras necesidades.
+
+Imágen
+Una imágen contiene distintas capas de datos (distribución, diferente software, librerías y personalización).
+Podemos llegar a la conslusión, que una imágen se conforma de distintas capas de personalización, en base a una capa inicial (base image), la dicha capa, es de donde la bajas de docker hud . Es la primera, si le agregas algo al contenedor de ubuntu una carpeta, un archivo, una funcionalidad  estas creando una capa nueva en base a la que ya tenias y asi puedes ir creando otro que tenga la funcionalidad creada ateriormente  y quieres agregarle otra funcion , ya es otra imagen pero ya en base ala que habiamos modificado 
+
+Comando
+Historico de una imágen
+Podemos observar la historia de nuestra imágen, con el siguiente comando
+$ docker history [imagen]
+
+Para contruir una imagen siempre tiene que estar basado en un archivo que se llama dockerfile el proceso es :
+partiendo de un dockerfile que describe lo que yo quiero que pase cuando creo una imagen y con un comando que se llama build el resultado va a ser una imagen , lo que tienes que tener en cuenta es q de una imagen puedemos generar infinitos contenedores no hay limites pero siempre es la misma imagen , lo interesante de esto es la manera de almacenar las imagenes en disco 
+
+comandos 
+$ mkdir imagenes :
+  creo un directorio en mi máquina
+
+$ cd imagenes :
+  entro al directorio
+
+$ touch Dockerfile :
+  creo un Dockerfile
+  
+$ code . :
+  abro mi visuls tudio code en el direcotrio en el que estoy
+  
+Dentro ya del visul studio code agrego contenido el archivo dockerfile 
+
+	*FROM ubuntu:latest               : le decimos que cree la imagen basada en ubuntu:latest 
+	
+	*RUN touch /ust/src/ejemplos.txt  : despues le decimos que en base una imagen de ubuntu:latest resulte en una imagen nueva 
+
+* docker build -t ubuntu:platzi . :
+  
+* docker run -it ubuntu:platzi    :
+  Corro el contenedor con la nueva imagen
+  
+* docker login :
+  Me logueo en docker hub
+  
+* docker tag ubuntu:platzi <mi_usuario_dockerhud>/ubuntu:platzy :
+  cambio el nombre del imagen por que docker hud no me lo permite asi.
+  por que cree que es una distribucion ofical de ubuntu una actulizacion y te denegara el acceso por no tener los permisos    
+  para evitar eso cambiamos el nombre de la imagen con la bandera 
+
+* docker push <mi_usuario_dockerhud>/ubuntu:platzi :
+  publico la imagen a mi docker hub
