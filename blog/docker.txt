@@ -143,7 +143,6 @@ CONCEPTOS FUNDAMENTALES DE DOCKER :CONTENEDORES
 ¿ Que es un Contenedor ?
 
 Un contenedor es :
-
 *Una agrupacion de procesos
 
 *Es una entidad logica, no tiene el limite estricto de las maquinas virtuales,ni el  de emulacion del sistema simulado por debajo 
@@ -167,15 +166,17 @@ Un contenedor es :
 
 CLASE 9
 comandos de DOCKER
-* docker run hello-world (corro el contenedor hello-world)
-* docker ps (muestra los contenedores activos)
-* docker ps -a (muestra todos los contenedores)
-* docker inspect <containe ID> (muestra el detalle completo de un contenedor)
-* docker inspect <name> (igual que el anterior pero invocado con el nombre)
-* docker run –-name hello-platzi hello-world (le asigno un nombre custom “hello-platzi”)
-* docker rename hello-platzi hola-platzy (cambio el nombre de hello-platzi a hola-  platzi)
-* docker rm <ID o nombre> (borro un contenedor)
-* docker container prune (borro todos lo contenedores que esten parados)
+* docker run hello-world : (corro el contenedor hello-world)
+* docker ps              : (muestra los contenedores activos)
+* docker ps -a           : (muestra todos los contenedores)
+* docker rm <ID o nombre>: (borro un contenedor)
+* docker container prune : (borro todos lo contenedores que esten parados)
+* docker inspect <name>  : (igual que el anterior pero invocado con el nombre)
+* docker inspect <containe ID> : (muestra el detalle completo de un contenedor)
+* docker rename hello-platzi hola-platzy : (cambio el nombre de hello-platzi a hola-  platzi)
+* docker run –-name hello-platzi hello-world : (le asigno un nombre custom “hello-platzi”)
+
+
 
 CLASE 10 
 MODO INTERATIVO 
@@ -184,13 +185,13 @@ El modo interativo es un comando que nos permite interaturar con distribuciones 
 
 
 Comandos para interatutar con el modo interativo
-* docker run ubuntu (corre un ubuntu pero lo deja apagado)
-* docker ps -a (lista todos los contenedores)
-* docker -it ubuntu (lo corre y entro al shell de ubuntu)
+* docker run ubuntu : (corre un ubuntu pero lo deja apagado)
+* docker ps -a      : (lista todos los contenedores)
+* docker -it ubuntu : (lo corre y entro al shell de ubuntu)
 
 Con este comando vemos o verificamos que version estamos utilizando de ubuntu dentro del shell de windos o mac 
 
-*cat /etc/lsb-release (veo la versión de Linux)
+*cat /etc/lsb-release: (veo la versión de Linux)
 
 En general es el comando de de toda la vida de linux para mostrar el contenido de los archivos 'cat' y nos movemos entre las carpetas hasta llegar a la referencia del sistema 
 
@@ -229,6 +230,7 @@ Para matar el proceso principal del contenedor desde afuera se ejecuta el siguie
 
 
 CLASE 12 EXPONIENDO CONTENEDORES
+
 Los contenedores estan aislados del sistema y a nivel de red, cada contenedor tiene su propio stack de net sus propios puertos.
 Debemos redirigir esos puertos a los puertos que estan disponibles en nuestra computadora y lo podemos hacer con la bandera -p lo que hace referencia a 'publish'
 
@@ -238,12 +240,83 @@ el comando que coneta el puerto de nuestra computadora con el puerto de un conte
 Comandos :
 *docker run -d --name [name] -p [LocalHostPort/8080]:[ContainerPort/80] [imagen/nginx]
 
-*docker run -d --name proxy -p 8080:80 nginx :(corro un nginx y expongo el puerto 80 del contenedor en el puerto 8080 de mi máquina)localhost:8080 (desde mi navegador compruebo que funcione)
+*docker run -d --name proxy -p 8080:80 nginx:(corro un nginx y expongo el puerto 80 del contenedor en el puerto 8080 de mi máquina)localhost:8080 (desde mi navegador compruebo que funcione)
 
 Otros Comandos
-* docker stop  <nombre_contenedor>
+* docker stop  <nombre_contenedor> : (apaga el contenedor)
 * docker run -d --name proxy nginx : (crea una imagen de nginx en el contenedor proxy)
-* docker rm proxy : (borro el contenedor)
-* docker rm -f <contenedor> :(para el contendor y lo borra)
-* docker logs proxy : (veo los logs del contenedor)
-* docker logs --tail 10 -f proxy (veo y sigo solo las 10 últimas entradas del log)
+* docker rm proxy                  : (borro el contenedor)
+* docker rm -f <contenedor>        : (para el contendor y lo borra)
+* docker logs proxy                : (veo los logs del contenedor)
+* docker logs --tail 10 -f proxy   : (veo y sigo solo las 10 últimas entradas del log) 
+
+NUEVO MODULO DATOS DE DOCKER
+
+CLASE 13 BIND MOUNTS -v
+lo primero que tenemos que tener en cuenta es q debemos tener claro la ruta en donde se van a guardar archivos por ejemplo yo ya sabia que mongo guarda sus datos en una carpetada que se llama data y hay almacena los datos en un archivo llamado db en base a eso yo ya puedo saber en donde se van a guardar y asi uilizarlo 
+
+los bind mounts son maneras de compartir tu informacion en diferentes contenedores sin que cuando elimines el contenedor no se pierda la informacion basicamente lo que hace es atar una ruta al contenedor todo lo que coloquemos o guardemos se quedara en la maquina anfitriona y sera cargado con la ruta del archivo al siguiente contenedor asi puede persistir los datos.
+
+El bind mounts se identifica con la -v colocando el -v antes de la ruta que vamos  a especificar ya docker va a saber que eso es un bind mount 
+
+Aqui especificamos que vamos a crear un contenedor con nombre db que va a puntar a esta ruta '/home/sebastian/Cursos/curso_docker/dockerdata/MongoData:/data/db' donde vamos a guardar nuestra informacion de los usuarios.
+Cada vez que borremos y volvamos a crear un contenedor debemos apuntar a donde se van a guarda la informacion 
+
+comando principal
+*sudo docker run -d --name db -v /home/sebastian/Cursos/curso_docker/dockerdata/MongoData:/data/db mongo:
+
+comandos 
+* mkdir dockerdata : (creo un directorio en mi máquina con nombre dockerdata)
+* docker ps        : (veo los contenedores activos)
+* docker run -d --name db mongo : ( ejecuta un contenedor con nombre db y una imagen de mongo)
+* docker exec -it db bash       : (entro al bash del contenedor)
+* mongo : (me conecto a la BBDD de mongo)
+	Dentro ya del bash y ejecuantando mongo en la terminal de comandos podes comenzar a interatuar con la base de datos: 
+	*shows dbs (listo las BBDD)
+	*use platzi ( creo la BBDD platzi)
+	*db.users.insert({“nombre”:“guido”}) (inserto un nuevo dato)
+	*db.users.find() (veo el dato que agrege)
+
+CLASE 14 OTRA MANERA DE ALMECENAR DATOS 'VOLUMENES --mount'
+Docker nos ofrece otras maneras de manjear datos distintas a los band mounts vamos a hablar de volumes que es la manera mas estandar de manejar datos en docker que no es la primera que salio pero los volumenes llegaron para solucionar un problema de los band mounts es la nueva actualizacion de docker para manejar datos y mas seguro para las personas que ejecutan docker en entornos productivos, tiene mas seguridad que los band mounts , lo que sucede es que la parte del disco que le estamos dando lo coje el deamon de docker y lo administra y ya no esta disponible solo docker lo puede ver y lo esta administrando lo reguarda y le coloca mas seguridad encima, para poder acceder a el tenemos que ir directamente al docker volums para mirar el conenido del archivo esta es una de las desventajas de docker
+
+ventajas de los Volumenes 
+*Los volúmenes son más fáciles de respaldar o migrar que enlazar montajes.
+*Puede administrar volúmenes mediante los comandos de la CLI de Docker o la API de Docker.
+*Los volúmenes funcionan tanto en contenedores de Linux como de Windows.
+*Los volúmenes se pueden compartir de forma más segura entre varios contenedores.
+*Los controladores de volumen le permiten almacenar volúmenes en hosts remotos o proveedores en la nube, para cifrar el contenido de los volúmenes o para agregar otras funciones.
+*Los nuevos volúmenes pueden tener su contenido precargado por un contenedor.
+*Los volúmenes en Docker Desktop tienen un rendimiento mucho mayor que los montajes de enlace de hosts de Mac y Windows.
+
+Comandos
+* docker volume ls :
+listo los volumes
+
+* docker volume create dbdata :
+creo un volume de nombre dbdata
+
+* docker run -d --name db --mount src=dbdata,dst=/data/db mongo :
+	+ vamos a correr un contenedor 
+	
+	+ El -d significa que se va a ejecutar en bagraoun osea que se va a estar ejecutando por debajo
+	
+	+ Despues el nombre 'db'
+	
+ 	+ Le decimos que esto va a ser un volumen con la bandera --mount esta recive dos parametros el src='va a ser igual al 		  nombre del volumen si el volumen no esta creado docker automaticamente lo crea', despues le decimos donde van a 		  estar los datos que tiene que guardar y administrar'dts=/data/db' 
+ 	
+ 	+ despues le decimos de coja la imagen de mongo 
+
+* docker inspect db :
+veo la información detallada del contenedor
+
+*mongo :
+Me conecto a la BBDD
+	una vez ya dentro de mongo ejecuto los comandos para crear la base de datos :
+	* shows dbs  :listo las BBDD
+	* use platzi : creo la BBDD platzi
+	* db.users.insert({“nombre”:“guido”}): inserto un nuevo dato
+	* db.users.find(): veo el dato que cargué
+	
+
+
